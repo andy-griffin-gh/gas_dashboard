@@ -3,8 +3,6 @@ import pandas as pd
 import requests
 import io
 import altair as alt
-import seaborn as sns
-import matplotlib.pyplot as plt
 
 # Function to load data from Google Drive
 def load_data_from_google_drive(file_id):
@@ -41,20 +39,7 @@ filtered_data = data[
     (data['ENVInterval'].isin(selected_intervals))
 ]
 
-
 st.title("Oil & Gas Production Analysis Dashboard")
-
-# Correlation Matrix
-st.subheader("Correlation Matrix")
-corr_columns = [
-    'First36MonthGas_MCF', 'TVD_FT', 'PerfInterval_FT', 
-    'ProppantIntensity_LBSPerFT', 'FluidIntensity_BBLPerFT', 'First6MonthGas_MCF'
-]
-corr_data = filtered_data[corr_columns].dropna()
-plt.figure(figsize=(10, 8))
-correlation_matrix = corr_data.corr()
-sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', center=0)
-st.pyplot(plt.gcf())
 
 # Histogram of the target variable
 st.subheader("Histogram of 36-Month Gas Production")
