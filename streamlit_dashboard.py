@@ -26,15 +26,16 @@ data = load_data_from_google_drive(file_id)
 data['FirstProdDate'] = pd.to_datetime(data['FirstProdDate'], errors='coerce')
 data['CompletionDate'] = pd.to_datetime(data['CompletionDate'], errors='coerce')
 
-# Sidebar filter for selecting a single ENVRegion
+# Sidebar filter for selecting an ENVRegion with an "All Regions" option
 st.sidebar.header("Filter by Region")
-selected_region = st.sidebar.selectbox(
-    "Select Region:",
-    options=sorted(data['ENVRegion'].unique())
-)
+regions = ["All Regions"] + sorted(data['ENVRegion'].unique())
+selected_region = st.sidebar.selectbox("Select Region:", options=regions)
 
-# Filter data based on the selected region
-filtered_data = data[data['ENVRegion'] == selected_region]
+# Apply filter based on the selected region
+if selected_region != "All Regions":
+    filtered_data = data[data['ENVRegion'] == selected_region]
+else:
+    filtered_data = data
 
 st.title("Oil & Gas Production Analysis Dashboard")
 
