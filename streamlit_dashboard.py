@@ -4,9 +4,10 @@ import requests
 import io
 import altair as alt
 
-# Function to load data from Google Drive
+# Caching the data loading function
+@st.cache_data
 def load_data_from_google_drive(file_id):
-    """Function to download CSV file from Google Drive."""
+    """Function to download and cache CSV file from Google Drive."""
     download_url = f'https://drive.google.com/uc?id={file_id}&export=download'
     response = requests.get(download_url)
     response.raise_for_status()  # Ensure the request was successful
@@ -14,9 +15,10 @@ def load_data_from_google_drive(file_id):
     if '<html' in response.text.lower():
         raise ValueError("The downloaded content is not a CSV file. Please check the file link and permissions.")
     
+    # Load CSV data
     return pd.read_csv(io.StringIO(response.text))
 
-# Load the dataset from Google Drive
+# Load the dataset from Google Drive with caching
 file_id = '1xofhXxREtpx2dX41eBqtUWGlRDKIPL8U'
 data = load_data_from_google_drive(file_id)
 
@@ -27,14 +29,12 @@ data['CompletionDate'] = pd.to_datetime(data['CompletionDate'], errors='coerce')
 # Sidebar Filters for Categorical Variables
 st.sidebar.header("Filters")
 selected_regions = st.sidebar.multiselect("Select Region(s)", options=sorted(data['ENVRegion'].unique()), default=sorted(data['ENVRegion'].unique()))
-selected_plays = st.sidebar.multiselect("Select Play(s)", options=sorted(data['ENVPlay'].unique()), default=sorted(data['ENVPlay'].unique()))
 selected_subplays = st.sidebar.multiselect("Select SubPlay(s)", options=sorted(data['ENVSubPlay'].unique()), default=sorted(data['ENVSubPlay'].unique()))
 selected_intervals = st.sidebar.multiselect("Select Interval(s)", options=sorted(data['ENVInterval'].unique()), default=sorted(data['ENVInterval'].unique()))
 
 # Apply filters to the dataset
 filtered_data = data[
     (data['ENVRegion'].isin(selected_regions)) &
-    (data['ENVPlay'].isin(selected_plays)) &
     (data['ENVSubPlay'].isin(selected_subplays)) &
     (data['ENVInterval'].isin(selected_intervals))
 ]
