@@ -28,22 +28,19 @@ data['CompletionDate'] = pd.to_datetime(data['CompletionDate'], errors='coerce')
 
 # Sidebar Filters for Categorical Variables
 st.sidebar.header("Filters")
-selected_operators = st.sidebar.multiselect("Select Operator(s)", options=sorted(data['ENVOperator'].unique()), default=sorted(data['ENVOperator'].unique()))
 selected_regions = st.sidebar.multiselect("Select Region(s)", options=sorted(data['ENVRegion'].unique()), default=sorted(data['ENVRegion'].unique()))
-selected_basins = st.sidebar.multiselect("Select Basin(s)", options=sorted(data['ENVBasin'].unique()), default=sorted(data['ENVBasin'].unique()))
 selected_plays = st.sidebar.multiselect("Select Play(s)", options=sorted(data['ENVPlay'].unique()), default=sorted(data['ENVPlay'].unique()))
 selected_subplays = st.sidebar.multiselect("Select SubPlay(s)", options=sorted(data['ENVSubPlay'].unique()), default=sorted(data['ENVSubPlay'].unique()))
 selected_intervals = st.sidebar.multiselect("Select Interval(s)", options=sorted(data['ENVInterval'].unique()), default=sorted(data['ENVInterval'].unique()))
 
 # Apply filters to the dataset
 filtered_data = data[
-    (data['ENVOperator'].isin(selected_operators)) &
     (data['ENVRegion'].isin(selected_regions)) &
-    (data['ENVBasin'].isin(selected_basins)) &
     (data['ENVPlay'].isin(selected_plays)) &
     (data['ENVSubPlay'].isin(selected_subplays)) &
     (data['ENVInterval'].isin(selected_intervals))
 ]
+
 
 st.title("Oil & Gas Production Analysis Dashboard")
 
