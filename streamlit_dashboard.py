@@ -29,13 +29,11 @@ data['CompletionDate'] = pd.to_datetime(data['CompletionDate'], errors='coerce')
 # Sidebar Filters for Categorical Variables
 st.sidebar.header("Filters")
 selected_regions = st.sidebar.multiselect("Select Region(s)", options=sorted(data['ENVRegion'].unique()), default=sorted(data['ENVRegion'].unique()))
-selected_subplays = st.sidebar.multiselect("Select SubPlay(s)", options=sorted(data['ENVSubPlay'].unique()), default=sorted(data['ENVSubPlay'].unique()))
 selected_intervals = st.sidebar.multiselect("Select Interval(s)", options=sorted(data['ENVInterval'].unique()), default=sorted(data['ENVInterval'].unique()))
 
 # Apply filters to the dataset
 filtered_data = data[
     (data['ENVRegion'].isin(selected_regions)) &
-    (data['ENVSubPlay'].isin(selected_subplays)) &
     (data['ENVInterval'].isin(selected_intervals))
 ]
 
